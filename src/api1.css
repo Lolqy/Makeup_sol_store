@@ -1,0 +1,61 @@
+/* api1.css */
+#makeup_input {
+  width: 250px;
+  height: 10px;
+  padding: 10px;
+  margin: 20px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* Style for the button */
+button {
+  width: 100px;
+  height: 35px;
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+button:active {
+  background-color: #3e8e41;
+}
+
+/* Style for the 'Back' button */
+a button {
+  margin-top: 20px;
+}
+
+a button:hover {
+  background-color: #f44336;
+}
+
+/* Style for the 'Add to Favorite' button */
+.add-to-favorite-btn {
+  width: 150px; /* Adjust the width according to your preference */
+  height: 50px; /* Adjust the height according to your preference */
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px; /* Adjust the font size according to your preference */
+  margin: 4px 2px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.add-to-favorite-btn:hover {
+  background-color: white; /* Change the background color on hover */
+  color: #4CAF50;
+}

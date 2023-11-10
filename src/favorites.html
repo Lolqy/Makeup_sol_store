@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Favorite Items</title>
+    <link rel="stylesheet" type="text/css" href="index.css">
+    <link rel="stylesheet" type="text/css" href="favorites.css">
+  </head>
+  </head>
+  <body>
+    <h1>Favorite Items</h1>
+    <ul class="grid-container" id="favorites-list"></ul>
+    <button onclick="goBack()">Go back</button>
+
+    <script>
+      const itemsMap = {};
+
+      fetch('http://localhost:3000/get-favorites')
+        .then(response => response.json())
+        .then(data => {
+          const favoritesList = document.getElementById('favorites-list');
+          data.forEach(item => {
+            if (itemsMap[item]) {
+              itemsMap[item] += 1;
+            } else {
+              itemsMap[item] = 1;
+
+              const listItem = document.createElement('li');
+              listItem.className = 'grid-item';
+
+              const itemText = document.createElement('span');
+              itemText.textContent = item;
+              listItem.appendChild(itemText);
+
+              const decreaseButton = document.createElement('button');
+              decreaseButton.textContent = '-';
+              decreaseButton.onclick = () => changeQuantity(item, -1);
+              listItem.appendChild(decreaseButton);
+
+              const quantitySpan = document.createElement('span');
+              quantitySpan.textContent = itemsMap[item]; // Display quantity here
+              listItem.appendChild(quantitySpan);
+
+              const increaseButton = document.createElement('button');
+              increaseButton.textContent = '+';
+              increaseButton.onclick = () => changeQuantity(item, 1);
+              listItem.appendChild(increaseButton);
+
+              const updateButton = document.createElement('button');
+              updateButton.textContent = 'Update';
+              updateButton.onclick = () => updateQuantity(item, itemsMap[item]);
+              listItem.appendChild(updateButton);
+
+              const deleteButton = document.createElement('button');
+              deleteButton.textContent = 'Delete';
+              deleteButton.onclick = () => deleteFromFavorites(item);
+              listItem.appendChild(deleteButton);
+
+              favoritesList.appendChild(listItem);
+            }
+          });
+        })
+        .catch(error => console.error('Error:', error));
+
+      function changeQuantity(name, value) {
+        const quantitySpan = Array.from(document.getElementById('favorites-list').children).find(
+          li => li.firstChild.textContent === name
+        ).children[1];
+        itemsMap[name] += value;
+        quantitySpan.textContent = itemsMap[name]; // Update quantity display here
+      }
+
+      function updateQuantity(name, quantity) {
+        fetch('http://localhost:3000/update-favorite-quantity', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ name, quantity }),
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return response.text();
+          })
+          .then((data) => console.log(data))
+          .catch((error) => console.error('Error:', error));
+      }
+
+      function deleteFromFavorites(name) {
+        fetch('http://localhost:3000/delete-from-favorite', {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ name: name }),
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return response.text();
+          })
+          .then((data) => {
+            console.log(data);
+            location.reload(); // Refresh the page after deletion
+          })
+          .catch((error) => console.error('Error:', error));
+      }
+
+      function goBack() {
+        window.location.href = "api1.html";
+      }
+    </script>
+  </body>
+</html>
